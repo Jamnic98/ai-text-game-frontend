@@ -1,36 +1,43 @@
-const Message = ({member, data, me}) => {
-	const {username, color, id} = member
-
-	const messageFromMe = id === me.id
-
+// Message.jsx
+const Message = ({ member, data, me }) => {
+	const { username, color, id } = member;
+  
+	const messageFromMe = id === me.id;
+  
 	const messageStyle = {
-		alignSelf: messageFromMe ? 'flex-end' : 'flex-start',
-		backgroundColor: messageFromMe ? '#DCF8C6' : '#F0F0F0',
-		color: '#000',
-		borderRadius: '10px',
-		padding: '10px',
-		maxWidth: '30%',
-		marginBottom: '10px',
-		wordWrap: 'break-word',
-	}
-
+	  display: 'flex',
+	  flexDirection: 'column',
+	  alignSelf: messageFromMe ? 'flex-end' : 'flex-start',
+	  backgroundColor: messageFromMe ? '#3faffa' : '#e0e0e0',
+	  color: messageFromMe ? '#ffffff' : '#000000',
+	  borderRadius: '10px',
+	  padding: '10px',
+	  maxWidth: '60%',
+	  margin: '5px',
+	  wordWrap: 'break-word',
+	};
+  
+	const avatarStyle = {
+	  display: !messageFromMe ? 'block' : 'none',
+	  backgroundColor: color,
+	  width: '20px',
+	  height: '20px',
+	  borderRadius: '50%',
+	  marginRight: '8px',
+	};
+  
 	return (
-		<li style={messageStyle}>
-			<span
-				style={{
-					backgroundColor: color,
-					width: '30px',
-					height: '30px',
-					borderRadius: '50%',
-					display: 'inline-block',
-				}}
-			/>
-			<div style={{marginLeft: '10px'}}>
-				<div style={{fontWeight: 'bold'}}>{username}</div>
-				<div>{data}</div>
-			</div>
-		</li>
-	)
-}
-
-export default Message
+	  <div style={messageStyle}>
+		<div style={{ display: 'flex', alignItems: 'center' }}>
+		  <span style={avatarStyle}></span>
+		  <div style={{ fontWeight: 'bold', fontSize: '0.8rem', marginBottom: '3px' }}>
+			{username}
+		  </div>
+		</div>
+		<div style={{ fontSize: '0.9rem', maxWidth: '100%' }}>{data}</div>
+	  </div>
+	);
+  };
+  
+  export default Message;
+  
