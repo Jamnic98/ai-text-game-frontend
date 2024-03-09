@@ -16,9 +16,9 @@ const Home = () => {
         }}
       >
         <Container style={{ marginTop: '1%' }}>
-          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '620px', margin: '0 auto' }}>
             <h1 style={{ fontSize: '2.5em', marginBottom: '20px' }}>
-              Welcome to AI Adventure World
+              Welcome to AI Adventure World 🔮
             </h1>
             <p style={{ fontSize: '1.2em', marginBottom: '30px' }}>
               Your Gateway to Endless Text-Based Adventures
