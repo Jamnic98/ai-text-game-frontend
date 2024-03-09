@@ -14,8 +14,8 @@ const Messages = ({ messages, me }) => {
 
   return (
     <ListGroup style={{ listStyleType: 'none', padding: 0 }}>
-      {messages.map((message) => (
-        <ListGroup.Item key={message.id} style={{ marginBottom: '10px',background:"none", border:"none" }}>
+      {messages.map((message, index) => (
+        <ListGroup.Item key={index} style={{ marginBottom: '10px',background:"none", border:"none" }}>
           <Message member={message.member} data={message.data} me={me} />
         </ListGroup.Item>
       ))}

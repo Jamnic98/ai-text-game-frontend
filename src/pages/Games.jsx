@@ -7,16 +7,19 @@ const gamesData = [
     title: 'Game 1',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     thumbnail: 'https://images-ng.pixai.art/images/orig/11d9cd40-cbf2-448b-b1d2-53044f5f7804',
+    gameId: "abc"
   },
   {
     title: 'Game 2',
     description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     thumbnail: 'https://images-ng.pixai.art/images/orig/11d9cd40-cbf2-448b-b1d2-53044f5f7804',
+    gameId: "def"
   },
   {
     title: 'Game 3',
     description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     thumbnail: 'https://images-ng.pixai.art/images/orig/11d9cd40-cbf2-448b-b1d2-53044f5f7804',
+    gameId: "ghi"
   },
   // Add more game entries as needed
 ];
@@ -34,7 +37,9 @@ const GamesPage = () => {
               <Card.Body>
                 <Card.Title>{game.title}</Card.Title>
                 <Card.Text>{game.description}</Card.Text>
-                <Button variant="success">Play Now</Button>
+                <Button onClick={()=>{
+                  window.location.href = `/play/${game.gameId}`
+                }} variant="success">Play Now</Button>
               </Card.Body>
             </Card>
           </Col>
