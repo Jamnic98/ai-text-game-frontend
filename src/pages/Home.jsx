@@ -5,7 +5,6 @@ import NavBar from '../components/NavBar';
 const Home = () => {
   return (
     <>
-      <NavBar />
       <div
         style={{
           backgroundImage: "linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)",

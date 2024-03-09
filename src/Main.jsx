@@ -5,10 +5,12 @@ import Games from './pages/Games'
 import CreateGame from './pages/CreateGame'
 import Dashboard from './pages/Dashboard'
 import Play from './pages/Play'
+import NavBar from './components/NavBar'
 
 const Main = () => {
 	return (
 		<>
+			<NavBar />
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Home />} />
