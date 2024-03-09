@@ -11,7 +11,6 @@ const NavBar = () => {
       <Nav className="me-auto">
         <Nav.Link href="/games">Games</Nav.Link>
         <Nav.Link href="/create-game">Create New Game</Nav.Link>
-        <Nav.Link href="/dashboard">Dashboard</Nav.Link>
       </Nav>
     </Container>
   </Navbar>
