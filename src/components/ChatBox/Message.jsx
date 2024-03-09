@@ -1,23 +1,34 @@
-import styles from './ChatBox.module.css'
+const Message = ({member, data, me}) => {
+	const {username, color, id} = member
 
-const Message = ({member, data, id, me}) => {
-	console.log(member)
-	// 1
-	const {username, color} = member
-	// 2
-	const messageFromMe = member.id === me.id
-	const className = messageFromMe
-		? `${styles.messagesMessage} ${styles.currentMember}`
-		: styles.messagesMessage
-	// 3
+	const messageFromMe = id === me.id
+
+	const messageStyle = {
+		alignSelf: messageFromMe ? 'flex-end' : 'flex-start',
+		backgroundColor: messageFromMe ? '#DCF8C6' : '#F0F0F0',
+		color: '#000',
+		borderRadius: '10px',
+		padding: '10px',
+		maxWidth: '30%',
+		marginBottom: '10px',
+		wordWrap: 'break-word',
+	}
+
 	return (
-		<li key={id} className={className}>
-			<span className={styles.avatar} style={{backgroundColor: color}} />
-			<div className={styles.messageContent}>
-				<div className={styles.username}>{username}</div>
-				<div className={styles.text}>{data}</div>
+		<li style={messageStyle}>
+			<span
+				style={{
+					backgroundColor: color,
+					width: '30px',
+					height: '30px',
+					borderRadius: '50%',
+					display: 'inline-block',
+				}}
+			/>
+			<div style={{marginLeft: '10px'}}>
+				<div style={{fontWeight: 'bold'}}>{username}</div>
+				<div>{data}</div>
 			</div>
-			{/* <div>{message}</div> */}
 		</li>
 	)
 }

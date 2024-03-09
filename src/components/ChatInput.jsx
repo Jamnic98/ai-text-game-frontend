@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react'
 
+import {Button, Form, Row, Col} from 'react-bootstrap'
+
 // import styles from './Input.module.css'
 
 const ChatInput = ({onSendMessage}) => {
@@ -19,14 +21,27 @@ const ChatInput = ({onSendMessage}) => {
 	return (
 		<div /* className={styles.input} */>
 			<form onSubmit={(e) => onSubmit(e)}>
-				<input
-					onChange={(e) => onChange(e)}
-					value={text}
-					type="text"
-					placeholder="Input Message"
-					autoFocus
-				/>
-				<button>Send</button>
+				<Row>
+					<Col>
+						<Form.Control
+							// size="lg"
+							type="text"
+							placeholder="Input Message"
+							onChange={(e) => onChange(e)}
+							value={text}
+							autoFocus
+						/>
+					</Col>
+					<Col>
+						<Button
+							variant="primary"
+							type="submit"
+							disabled={text.length === 0}
+						>
+							Send
+						</Button>
+					</Col>
+				</Row>
 			</form>
 		</div>
 	)
