@@ -10,7 +10,6 @@ import Button from 'react-bootstrap/Button'
 import ChatBox from '../components/ChatBox/ChatBox'
 import ChatInput from '../components/ChatInput'
 import Loader from '../components/Loader'
-import GameOverModal from '../components/GameOverModal'
 
 const computer = {
 	id: '0',
@@ -147,7 +146,7 @@ export default function Play() {
 									me={me}
 									loadingNextMsg={isLoadingMsg}
 								/>
-								<div>
+								<div style={{marginTop: 5}}>
 									{isGameOver && (
 										<div
 											style={{

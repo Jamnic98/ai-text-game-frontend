@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-import {Button, Form, Row, Col} from 'react-bootstrap'
+import {Button, Form, Row, InputGroup} from 'react-bootstrap'
 
 // import styles from './Input.module.css'
 
@@ -22,7 +22,7 @@ const ChatInput = ({onSendMessage, disabled}) => {
 		<div style={{padding: 10}}>
 			<form onSubmit={(e) => onSubmit(e)}>
 				<Row>
-					<Col md={10}>
+					<InputGroup className="mb-3">
 						<Form.Control
 							type="text"
 							placeholder="Input Message"
@@ -31,8 +31,6 @@ const ChatInput = ({onSendMessage, disabled}) => {
 							autoFocus
 							disabled={disabled}
 						/>
-					</Col>
-					<Col md={2}>
 						<Button
 							variant="primary"
 							type="submit"
@@ -40,7 +38,7 @@ const ChatInput = ({onSendMessage, disabled}) => {
 						>
 							Send
 						</Button>
-					</Col>
+					</InputGroup>
 				</Row>
 			</form>
 		</div>
