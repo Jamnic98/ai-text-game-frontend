@@ -27,11 +27,12 @@ export default function Play() {
 	const navigate = useNavigate()
 	const {gameId} = useParams()
 	const [gameData, setGameData] = useState(null)
-	// const [imageBase64Data, setImageBase64Data] = useState('')
 	const [messages, setMessages] = useState([])
 	const [isLoadingMsg, setIsLoadingMsg] = useState(true)
 	const [isGameOver, setIsGameOver] = useState(false)
+
 	const [imagePrompt, setImagePrompt] = useState(null)
+	// const [imageBase64Data, setImageBase64Data] = useState('')
 
 	// initialise the game state
 	useEffect(() => {
@@ -124,9 +125,11 @@ export default function Play() {
 				<>
 					<Container fluid>
 						<Row>
-							<header>
+							<header style={{textAlign: 'center'}}>
 								<h1 className="mt-5 mb-4">{gameData.title}</h1>
-								<p>{gameData.objective}</p>
+								<p style={{width: '50%', margin: 'auto'}}>
+									{gameData.objective}
+								</p>
 							</header>
 						</Row>
 						<Row style={{marginTop: '2%'}}>

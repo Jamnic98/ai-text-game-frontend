@@ -1,5 +1,6 @@
 import React from 'react'
 import {Card, Container, Row, Col, Button} from 'react-bootstrap'
+import {Link} from 'react-router-dom'
 
 const Home = () => {
 	return (
@@ -63,8 +64,9 @@ const Home = () => {
 						</Col>
 					</Row>
 					<Button
+						as={Link}
 						style={{marginTop: '3%'}}
-						href="/create-game"
+						to="/create-game"
 						variant="primary"
 						size="lg"
 					>
@@ -72,8 +74,9 @@ const Home = () => {
 					</Button>
 
 					<Button
+						as={Link}
 						style={{marginTop: '3%', marginLeft: '2%'}}
-						href="/games"
+						to="/games"
 						variant="success"
 						size="lg"
 					>

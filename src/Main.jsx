@@ -10,8 +10,8 @@ import NavBar from './components/NavBar'
 const Main = () => {
 	return (
 		<>
-			<NavBar />
 			<BrowserRouter>
+				<NavBar />
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/games" element={<Games />} />
