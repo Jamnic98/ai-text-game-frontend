@@ -2,7 +2,7 @@ import React from 'react'
 import Spinner from 'react-bootstrap/Spinner'
 import styles from './Loader.module.css' // Import a CSS file for custom styles (optional)
 
-const Loader = () => {
+const Loader = ({text}) => {
 	return (
 		<div className={styles.loaderContainer}>
 			<Spinner
@@ -10,6 +10,12 @@ const Loader = () => {
 				className={styles.loaderSpinner}
 				style={{content: 'none', cursor: 'none'}}
 			/>
+			<br />
+			{text && (
+				<div>
+					<p>{text}</p>
+				</div>
+			)}
 		</div>
 	)
 }

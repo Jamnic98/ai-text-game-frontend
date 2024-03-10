@@ -28,7 +28,7 @@ export default function Play() {
 	const {gameId} = useParams()
 	const [gameData, setGameData] = useState(null)
 	const [messages, setMessages] = useState([])
-	const [isLoadingMsg, setIsLoadingMsg] = useState(true)
+	const [isLoadingMsg, setIsLoadingMsg] = useState(false)
 	const [isLoadingImg, setIsLoadingImg] = useState(true)
 	const [isGameOver, setIsGameOver] = useState(false)
 
@@ -45,7 +45,9 @@ export default function Play() {
 
 	useEffect(() => {
 		if (imagePrompt) {
-			executeScript(imagePrompt).then(() => setIsLoadingImg(false))
+			executeScript(imagePrompt).then(() => {
+				setIsLoadingImg(false)
+			})
 		}
 	}, [imagePrompt])
 
@@ -68,6 +70,7 @@ export default function Play() {
 
 	const executeScript = async (prompt) => {
 		try {
+			setIsLoadingImg(true)
 			const response = await fetch('http://localhost:3001/execute-script', {
 				method: 'POST',
 				headers: {
@@ -82,7 +85,7 @@ export default function Play() {
 			const data = await response.json()
 			console.log(data.fileData)
 			setImageBase64Data(data.fileData)
-			setIsLoadingMsg((isLoadingImg) => isLoadingImg === false)
+			setIsLoadingImg((isLoadingImg) => isLoadingImg === false)
 		} catch (error) {
 			console.error('Error:', error.message)
 		}
@@ -113,7 +116,7 @@ export default function Play() {
 			setIsGameOver(true)
 		}
 		setImagePrompt(data.image_prompt)
-		setIsLoadingMsg((isLoadingMsg) => isLoadingMsg === false)
+		setIsLoadingMsg(false)
 		setMessages((messages) => [...messages, newMessage])
 	}
 
@@ -139,7 +142,7 @@ export default function Play() {
 								</p>
 							</header>
 						</Row>
-						<Row style={{marginTop: '2%'}}>
+						<Row>
 							<Col
 								style={{
 									backgroundColor: '#f8f9fa',
@@ -183,18 +186,29 @@ export default function Play() {
 								/>
 							</Col>
 							<Col>
-								<div>{imagePrompt}</div>
-								<div>
+								{/* <div>{imagePrompt}</div> */}
+								<>
 									{isLoadingImg ? (
-										<Loader />
+										<div
+											style={{
+												height: '65vh',
+												display: 'flex',
+												flexDirection: 'column',
+												justifyContent: 'space-around',
+											}}
+										>
+											<Loader text={'Generating Image'} />
+										</div>
 									) : (
 										<img
 											src={`data:image/png;base64,${imageBase64Data}`}
 											alt="Generated Image"
 											style={{maxWidth: '100%', borderRadius: '5%'}}
+											// width={800}
+											// height={800}
 										/>
 									)}
-								</div>
+								</>
 							</Col>
 						</Row>
 					</Container>

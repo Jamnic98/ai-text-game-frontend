@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 
 import {Button, Form, Row, InputGroup} from 'react-bootstrap'
 
-// import styles from './Input.module.css'
-
 const ChatInput = ({onSendMessage, disabled}) => {
 	const [text, setText] = useState('')
 
