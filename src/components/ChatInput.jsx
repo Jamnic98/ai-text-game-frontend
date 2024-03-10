@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 
 import {Button, Form, Row, Col} from 'react-bootstrap'
 
@@ -19,30 +19,30 @@ const ChatInput = ({onSendMessage}) => {
 	}
 
 	return (
-		<div>
-      <form onSubmit={(e) => onSubmit(e)}>
-        <Row>
-          <Col md={10}>
-            <Form.Control
-              type="text"
-              placeholder="Input Message"
-              onChange={(e) => onChange(e)}
-              value={text}
-              autoFocus
-            />
-          </Col>
-          <Col md={2}>
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={text.length === 0}
-            >
-              Send
-            </Button>
-          </Col>
-        </Row>
-      </form>
-    </div>
+		<div style={{padding: 10}}>
+			<form onSubmit={(e) => onSubmit(e)}>
+				<Row>
+					<Col md={10}>
+						<Form.Control
+							type="text"
+							placeholder="Input Message"
+							onChange={(e) => onChange(e)}
+							value={text}
+							autoFocus
+						/>
+					</Col>
+					<Col md={2}>
+						<Button
+							variant="primary"
+							type="submit"
+							disabled={text.length === 0}
+						>
+							Send
+						</Button>
+					</Col>
+				</Row>
+			</form>
+		</div>
 	)
 }
 

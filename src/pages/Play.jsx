@@ -1,97 +1,145 @@
 // Play.jsx
-import React, { useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import React, {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import axios from 'axios'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
-import ChatBox from '../components/ChatBox/ChatBox';
-import ChatInput from '../components/ChatInput';
+import ChatBox from '../components/ChatBox/ChatBox'
+import ChatInput from '../components/ChatInput'
+import Loader from '../components/Loader'
+
+const computer = {
+	id: '0',
+	username: 'AI',
+	color: '#FFFFFF',
+}
+
+const me = {
+	id: '1',
+	username: 'You',
+	color: '#000000',
+}
 
 export default function Play() {
-  let params = useParams();
-  let location = useLocation();
-  const [imageBase64Data, setImageBase64Data] = useState("");
+	const navigate = useNavigate()
+	const {gameId} = useParams()
+	const [gameData, setGameData] = useState(null)
+	// const [imageBase64Data, setImageBase64Data] = useState('')
+	const [messages, setMessages] = useState([])
+	const [imagePrompt, setImagePrompt] = useState(null)
 
-  const executeScript = async (prompt) => {
-    try {
-      const response = await fetch('http://localhost:3001/execute-script', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          command: 'hive run sdxl:v0.2.9',
-          prompt: prompt,
-        }),
-      });
+	// initialise the game state
+	useEffect(() => {
+		if (!gameData) {
+			fetchGameData(gameId)
+			startGame()
+		}
+	}, [gameId])
 
-      const data = await response.json();
-      console.log(data.fileData);
-      setImageBase64Data(data.fileData);
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-  };
+	const fetchGameData = async (gameId) => {
+		const response = await axios.get(`http://localhost:8000/games/${gameId}/`)
+		const {title, description, objective, current_setting} = response.data
+		setGameData({
+			title,
+			description,
+			objective,
+			current_setting,
+		})
+	}
 
-  const [messages, setMessages] = useState([
-    {
-      data: 'Hello! This is a user message.',
-      member: {
-        id: '1',
-        username: 'Test Player',
-        color: '#000000',
-      },
-    },
-    {
-      data: 'Hi there! This is a computer message.',
-      member: {
-        id: '0',
-        username: 'AI',
-        color: 'blue',
-      },
-    },
-  ]);
+	const startGame = async () => {
+		await makeMove('')
+	}
 
-  const me = {
-    id: '1',
-    username: 'Test Player',
-    color: '#000000',
-  };
+	// const executeScript = async (prompt) => {
+	// 	try {
+	// 		const response = await fetch('http://localhost:3001/execute-script', {
+	// 			method: 'POST',
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 			},
+	// 			body: JSON.stringify({
+	// 				command: 'hive run sdxl:v0.2.9',
+	// 				prompt: prompt,
+	// 			}),
+	// 		})
 
-  const onSendMessage = (message) => {
-    const newMessage = {
-      data: message,
-      member: me,
-    };
-    setMessages([...messages, newMessage]);
+	// 		const data = await response.json()
+	// 		console.log(data.fileData)
+	// 		setImageBase64Data(data.fileData)
+	// 	} catch (error) {
+	// 		console.error('Error:', error.message)
+	// 	}
+	// }
 
-    executeScript('a person running from an angry ferrari stuck in a forest');
-  };
+	const onSendMessage = async (message) => {
+		const newMessage = {
+			data: message,
+			member: me,
+		}
+		setMessages((messages) => [...messages, newMessage])
+		await makeMove(message)
 
-  return (
-    <>
-      <Container fluid>
-        <Row style={{ marginTop: "2%" }}>
-          <Col style={{
-            backgroundColor: '#f8f9fa',
-            padding: '20px',
-            borderRadius: "5%"
-          }} md={6}>
-            <ChatBox messages={messages} me={me} />
-            <ChatInput onSendMessage={onSendMessage} />
-          </Col>
-          <Col md={6}>
-            {imageBase64Data && (
-              <img
-                src={`data:image/png;base64,${imageBase64Data}`}
-                alt="Generated Image"
-                style={{ maxWidth: '100%', borderRadius: '5%' }}
-              />
-            )}
-          </Col>
-        </Row>
-      </Container>
-    </>
-  );
+		// executeScript('a person running from an angry ferrari stuck in a forest')
+	}
+
+	const makeMove = async (message) => {
+		const response = await axios.post(`http://localhost:8000/make_move`, {
+			id: gameId,
+			msg: message,
+		})
+		const data = response.data
+		console.log(data)
+		const newMessage = {
+			data: data.message,
+			member: computer,
+		}
+
+		if (data.is_finished) {
+			navigate(`/game-over/${gameId}`)
+		}
+
+		setMessages((messages) => [...messages, newMessage])
+	}
+
+	return (
+		<>
+			{gameData ? (
+				<Container fluid>
+					<Row>
+						<header>
+							<h1 className="mt-5 mb-4">{gameData.title}</h1>
+							{/* <p>{gameData.description}</p> */}
+						</header>
+					</Row>
+					<Row style={{marginTop: '2%'}}>
+						<Col
+							style={{
+								backgroundColor: '#f8f9fa',
+								padding: '20px',
+								borderRadius: '5%',
+							}}
+							md={6}
+						>
+							<ChatBox messages={messages} me={me} />
+							<ChatInput onSendMessage={onSendMessage} />
+						</Col>
+						{/* <Col md={6}>
+						{imageBase64Data && (
+							<img
+								src={`data:image/png;base64,${imageBase64Data}`}
+								alt="Generated Image"
+								style={{maxWidth: '100%', borderRadius: '5%'}}
+							/>
+						)}
+					</Col> */}
+					</Row>
+				</Container>
+			) : (
+				<Loader />
+			)}
+		</>
+	)
 }
