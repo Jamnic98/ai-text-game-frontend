@@ -5,6 +5,7 @@ import axios from 'axios'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 
 import ChatBox from '../components/ChatBox/ChatBox'
 import ChatInput from '../components/ChatInput'
@@ -97,15 +98,15 @@ export default function Play() {
 			msg: message,
 		})
 		const data = response.data
-		console.log(data)
+		// console.log(data)
 		const newMessage = {
 			data: data.message,
 			member: computer,
 		}
-
 		if (data.is_finished) {
 			setIsGameOver(true)
 		}
+		setImagePrompt(data.image_prompt)
 		setIsLoadingMsg((isLoadingMsg) => isLoadingMsg === false)
 		setMessages((messages) => [...messages, newMessage])
 	}
@@ -146,28 +147,45 @@ export default function Play() {
 									me={me}
 									loadingNextMsg={isLoadingMsg}
 								/>
+								<div>
+									{isGameOver && (
+										<div
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												justifyContent: 'center',
+												width: '50%',
+												margin: 'auto',
+											}}
+										>
+											<h6>Game Over</h6>
+											<p>Congratulations, you beat: {gameData.title}!</p>
+											<div style={{display: 'grid', gap: 10}}>
+												<Button onClick={handlePlayAgain} variant="success">
+													Play Again
+												</Button>
+												<Button onClick={handleNavigateToGames}>
+													Games Page
+												</Button>
+											</div>
+										</div>
+									)}
+								</div>
 								<ChatInput
 									onSendMessage={onSendMessage}
 									disabled={isGameOver}
 								/>
 							</Col>
-							{/* <Col md={6}>
-						{imageBase64Data && (
-							<img
-								src={`data:image/png;base64,${imageBase64Data}`}
-								alt="Generated Image"
-								style={{maxWidth: '100%', borderRadius: '5%'}}
-							/>
-						)}
-					</Col> */}
+							<Col>
+								<div>{imagePrompt}</div>
+								{/* <img
+									src={`data:image/png;base64,${imageBase64Data}`}
+									alt="Generated Image"
+									style={{maxWidth: '100%', borderRadius: '5%'}}
+								/> */}
+							</Col>
 						</Row>
 					</Container>
-					<GameOverModal
-						show={isGameOver}
-						gameTitle={gameData.title}
-						handlePlayAgain={handlePlayAgain}
-						handleNavigateToGames={handleNavigateToGames}
-					/>
 				</>
 			) : (
 				<div style={{height: '80vh'}}>
