@@ -29,10 +29,11 @@ export default function Play() {
 	const [gameData, setGameData] = useState(null)
 	const [messages, setMessages] = useState([])
 	const [isLoadingMsg, setIsLoadingMsg] = useState(true)
+	const [isLoadingImg, setIsLoadingImg] = useState(true)
 	const [isGameOver, setIsGameOver] = useState(false)
 
 	const [imagePrompt, setImagePrompt] = useState(null)
-	// const [imageBase64Data, setImageBase64Data] = useState('')
+	const [imageBase64Data, setImageBase64Data] = useState(null)
 
 	// initialise the game state
 	useEffect(() => {
@@ -41,6 +42,12 @@ export default function Play() {
 			startGame()
 		}
 	}, [gameId])
+
+	useEffect(() => {
+		if (imagePrompt) {
+			executeScript(imagePrompt).then(() => setIsLoadingImg(false))
+		}
+	}, [imagePrompt])
 
 	const fetchGameData = async (gameId) => {
 		const response = await axios.get(`http://localhost:8000/games/${gameId}/`)
@@ -54,30 +61,32 @@ export default function Play() {
 	}
 
 	const startGame = async () => {
+		setImagePrompt(null)
 		setMessages([])
 		await makeMove('')
 	}
 
-	// const executeScript = async (prompt) => {
-	// 	try {
-	// 		const response = await fetch('http://localhost:3001/execute-script', {
-	// 			method: 'POST',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 			},
-	// 			body: JSON.stringify({
-	// 				command: 'hive run sdxl:v0.2.9',
-	// 				prompt: prompt,
-	// 			}),
-	// 		})
+	const executeScript = async (prompt) => {
+		try {
+			const response = await fetch('http://localhost:3001/execute-script', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					command: 'hive run sdxl:v0.2.9',
+					prompt: prompt,
+				}),
+			})
 
-	// 		const data = await response.json()
-	// 		console.log(data.fileData)
-	// 		setImageBase64Data(data.fileData)
-	// 	} catch (error) {
-	// 		console.error('Error:', error.message)
-	// 	}
-	// }
+			const data = await response.json()
+			console.log(data.fileData)
+			setImageBase64Data(data.fileData)
+			setIsLoadingMsg((isLoadingImg) => isLoadingImg === false)
+		} catch (error) {
+			console.error('Error:', error.message)
+		}
+	}
 
 	const onSendMessage = async (message) => {
 		const newMessage = {
@@ -86,8 +95,6 @@ export default function Play() {
 		}
 		setMessages((messages) => [...messages, newMessage])
 		await makeMove(message)
-
-		// executeScript('a person running from an angry ferrari stuck in a forest')
 	}
 
 	const makeMove = async (message) => {
@@ -177,11 +184,17 @@ export default function Play() {
 							</Col>
 							<Col>
 								<div>{imagePrompt}</div>
-								{/* <img
-									src={`data:image/png;base64,${imageBase64Data}`}
-									alt="Generated Image"
-									style={{maxWidth: '100%', borderRadius: '5%'}}
-								/> */}
+								<div>
+									{isLoadingImg ? (
+										<Loader />
+									) : (
+										<img
+											src={`data:image/png;base64,${imageBase64Data}`}
+											alt="Generated Image"
+											style={{maxWidth: '100%', borderRadius: '5%'}}
+										/>
+									)}
+								</div>
 							</Col>
 						</Row>
 					</Container>

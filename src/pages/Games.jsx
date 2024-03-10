@@ -42,6 +42,7 @@ const GamesPage = () => {
 				<Row style={{marginTop: '3%'}}>
 					{games.length > 0 &&
 						games.map((game, index) => {
+							console.log(game)
 							return (
 								<Col
 									style={{height: '25%', width: '25%'}}
@@ -50,7 +51,7 @@ const GamesPage = () => {
 									className="mb-2"
 								>
 									<Card>
-										{/* <Card.Img variant="top" src={game.thumbnail} /> */}
+										<Card.Img variant="top" src={game.thumbnail} />
 										<Card.Body>
 											<Card.Title>{game.title}</Card.Title>
 											<Card.Text

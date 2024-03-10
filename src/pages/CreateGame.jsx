@@ -28,7 +28,11 @@ const CreateGamePage = () => {
 			e.preventDefault()
 			const {thumbnail, ...rest} = gameData
 			// Call API or perform actions with gameData
-			const response = await axios.post('http://localhost:8000/games/', rest)
+			// const response = await axios.post('http://localhost:8000/games/', rest)
+			const response = await axios.post(
+				'http://localhost:8000/games/',
+				gameData
+			)
 			// const gameId = response.data
 			navigate('/games')
 		} catch (error) {
@@ -89,16 +93,16 @@ const CreateGamePage = () => {
 					/>
 				</Form.Group>
 
-				{/* <Form.Group controlId="formThumbnail">
+				<Form.Group controlId="formThumbnail">
 					<Form.Label>Thumbnail Image</Form.Label>
 					<Form.Control
 						type="file"
 						name="thumbnail"
 						accept="image/*"
 						onChange={handleChange}
-						required
+						// required
 					/>
-				</Form.Group> */}
+				</Form.Group>
 
 				<Button style={{marginTop: '3%'}} variant="primary" type="submit">
 					Create Game
