@@ -4,7 +4,7 @@ import {Button, Form, Row, Col} from 'react-bootstrap'
 
 // import styles from './Input.module.css'
 
-const ChatInput = ({onSendMessage}) => {
+const ChatInput = ({onSendMessage, disabled}) => {
 	const [text, setText] = useState('')
 
 	function onChange(e) {
@@ -29,13 +29,14 @@ const ChatInput = ({onSendMessage}) => {
 							onChange={(e) => onChange(e)}
 							value={text}
 							autoFocus
+							disabled={disabled}
 						/>
 					</Col>
 					<Col md={2}>
 						<Button
 							variant="primary"
 							type="submit"
-							disabled={text.length === 0}
+							disabled={text.length === 0 || disabled}
 						>
 							Send
 						</Button>

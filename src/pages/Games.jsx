@@ -42,7 +42,6 @@ const GamesPage = () => {
 				<Row style={{marginTop: '3%'}}>
 					{games.length > 0 &&
 						games.map((game, index) => {
-							console.log(game)
 							return (
 								<Col
 									style={{height: '25%', width: '25%'}}

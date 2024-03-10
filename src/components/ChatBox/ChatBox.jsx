@@ -2,8 +2,9 @@
 import React from 'react'
 
 import Messages from './Messages'
+import Spinner from 'react-bootstrap/Spinner'
 
-const ChatBox = ({messages, me}) => {
+const ChatBox = ({messages, me, loadingNextMsg}) => {
 	return (
 		<div
 			style={{
@@ -14,6 +15,15 @@ const ChatBox = ({messages, me}) => {
 			}}
 		>
 			<Messages messages={messages} me={me} />
+			<div>
+				{loadingNextMsg && (
+					<span>
+						<Spinner animation="grow" size="sm" variant="primary" />
+						<Spinner animation="grow" size="sm" variant="primary" />
+						<Spinner animation="grow" size="sm" variant="primary" />
+					</span>
+				)}
+			</div>
 		</div>
 	)
 }

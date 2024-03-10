@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col'
 import ChatBox from '../components/ChatBox/ChatBox'
 import ChatInput from '../components/ChatInput'
 import Loader from '../components/Loader'
+import GameOverModal from '../components/GameOverModal'
 
 const computer = {
 	id: '0',
@@ -28,6 +29,8 @@ export default function Play() {
 	const [gameData, setGameData] = useState(null)
 	// const [imageBase64Data, setImageBase64Data] = useState('')
 	const [messages, setMessages] = useState([])
+	const [isLoadingMsg, setIsLoadingMsg] = useState(true)
+	const [isGameOver, setIsGameOver] = useState(false)
 	const [imagePrompt, setImagePrompt] = useState(null)
 
 	// initialise the game state
@@ -50,6 +53,7 @@ export default function Play() {
 	}
 
 	const startGame = async () => {
+		setMessages([])
 		await makeMove('')
 	}
 
@@ -86,6 +90,7 @@ export default function Play() {
 	}
 
 	const makeMove = async (message) => {
+		setIsLoadingMsg(true)
 		const response = await axios.post(`http://localhost:8000/make_move`, {
 			id: gameId,
 			msg: message,
@@ -98,35 +103,52 @@ export default function Play() {
 		}
 
 		if (data.is_finished) {
-			navigate(`/game-over/${gameId}`)
+			setIsGameOver(true)
 		}
-
+		setIsLoadingMsg((isLoadingMsg) => isLoadingMsg === false)
 		setMessages((messages) => [...messages, newMessage])
+	}
+
+	const handlePlayAgain = () => {
+		setIsGameOver(false)
+		startGame()
+	}
+
+	const handleNavigateToGames = () => {
+		navigate('/games')
 	}
 
 	return (
 		<>
 			{gameData ? (
-				<Container fluid>
-					<Row>
-						<header>
-							<h1 className="mt-5 mb-4">{gameData.title}</h1>
-							{/* <p>{gameData.description}</p> */}
-						</header>
-					</Row>
-					<Row style={{marginTop: '2%'}}>
-						<Col
-							style={{
-								backgroundColor: '#f8f9fa',
-								padding: '20px',
-								borderRadius: '5%',
-							}}
-							md={6}
-						>
-							<ChatBox messages={messages} me={me} />
-							<ChatInput onSendMessage={onSendMessage} />
-						</Col>
-						{/* <Col md={6}>
+				<>
+					<Container fluid>
+						<Row>
+							<header>
+								<h1 className="mt-5 mb-4">{gameData.title}</h1>
+								<p>{gameData.objective}</p>
+							</header>
+						</Row>
+						<Row style={{marginTop: '2%'}}>
+							<Col
+								style={{
+									backgroundColor: '#f8f9fa',
+									padding: '20px',
+									borderRadius: '5%',
+								}}
+								md={6}
+							>
+								<ChatBox
+									messages={messages}
+									me={me}
+									loadingNextMsg={isLoadingMsg}
+								/>
+								<ChatInput
+									onSendMessage={onSendMessage}
+									disabled={isGameOver}
+								/>
+							</Col>
+							{/* <Col md={6}>
 						{imageBase64Data && (
 							<img
 								src={`data:image/png;base64,${imageBase64Data}`}
@@ -135,10 +157,19 @@ export default function Play() {
 							/>
 						)}
 					</Col> */}
-					</Row>
-				</Container>
+						</Row>
+					</Container>
+					<GameOverModal
+						show={isGameOver}
+						gameTitle={gameData.title}
+						handlePlayAgain={handlePlayAgain}
+						handleNavigateToGames={handleNavigateToGames}
+					/>
+				</>
 			) : (
-				<Loader />
+				<div style={{height: '80vh'}}>
+					<Loader />
+				</div>
 			)}
 		</>
 	)
