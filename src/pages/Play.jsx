@@ -134,7 +134,7 @@ export default function Play() {
 			{gameData ? (
 				<>
 					<Container fluid>
-						<Row>
+						<Row style={{marginBottom:"2%"}}>
 							<header style={{textAlign: 'center'}}>
 								<h1 className="mt-5 mb-4">{gameData.title}</h1>
 								<p style={{width: '50%', margin: 'auto'}}>
@@ -197,13 +197,13 @@ export default function Play() {
 												justifyContent: 'space-around',
 											}}
 										>
-											<Loader text={'Generating Image'} />
+											<Loader text={'Generating Scene, submitting job onto the Coophive network'} />
 										</div>
 									) : (
 										<img
 											src={`data:image/png;base64,${imageBase64Data}`}
 											alt="Generated Image"
-											style={{maxWidth: '100%', borderRadius: '5%'}}
+											style={{maxWidth: '100%', borderRadius: '5%', 	height: '65vh'}}
 											// width={800}
 											// height={800}
 										/>

@@ -17,7 +17,7 @@ const ChatInput = ({onSendMessage, disabled}) => {
 	}
 
 	return (
-		<div style={{padding: 10}}>
+		<div style={{}}>
 			<form onSubmit={(e) => onSubmit(e)}>
 				<Row>
 					<InputGroup className="mb-3">
