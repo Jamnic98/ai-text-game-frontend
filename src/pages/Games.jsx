@@ -3,6 +3,7 @@ import {Container, Card, Row, Col, Button} from 'react-bootstrap'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import Loader from '../components/Loader'
+import Base64Img from '../components/Base64Img'
 
 const GamesPage = () => {
 	const [loading, setLoading] = useState(true)
@@ -30,7 +31,7 @@ const GamesPage = () => {
 	}
 
 	return (
-		<Container fluid>
+		<Container>
 			<h2 className="mt-4 mb-4">Games</h2>
 			<p>
 				Explore and play exciting games on our platform. Choose from a variety
@@ -39,7 +40,9 @@ const GamesPage = () => {
 			{loading ? (
 				<Loader />
 			) : (
-				<Row style={{marginTop: '3%'}}>
+				<Row
+					style={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap'}}
+				>
 					{games.length > 0 &&
 						games.map((game, index) => {
 							console.log(game)
@@ -50,27 +53,29 @@ const GamesPage = () => {
 									md={4}
 									className="mb-2"
 								>
-									<Card>
-										<Card.Img variant="top" src={game.thumbnail} />
+									<Card style={{width: '320px'}}>
 										<Card.Body>
-											<Card.Title>{game.title}</Card.Title>
-											<Card.Text
-												style={{
-													width: '100%',
-													height: '30px',
-													textOverflow: 'ellipsis',
-													overflow: 'hidden',
-													whiteSpace: 'nowrap',
-												}}
-											>
-												{game.description}
-											</Card.Text>
-											<Button
-												variant="success"
-												onClick={() => handleClick(game.id)}
-											>
-												Play Now
-											</Button>
+											<Col>
+												<Base64Img imageStr={game.thumbnail} />
+												<Card.Title>{game.title}</Card.Title>
+												<Card.Text
+													style={{
+														width: '100%',
+														height: '30px',
+														textOverflow: 'ellipsis',
+														overflow: 'hidden',
+														whiteSpace: 'nowrap',
+													}}
+												>
+													{game.description}
+												</Card.Text>
+												<Button
+													variant="success"
+													onClick={() => handleClick(game.id)}
+												>
+													Play Now
+												</Button>
+											</Col>
 										</Card.Body>
 									</Card>
 								</Col>

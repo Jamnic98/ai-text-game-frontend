@@ -6,6 +6,7 @@ import axios from 'axios'
 
 const CreateGamePage = () => {
 	const navigate = useNavigate()
+	const [isLoading, setIsLoading] = useState(false)
 	const [gameData, setGameData] = useState({
 		title: '',
 		description: '',
@@ -25,6 +26,7 @@ const CreateGamePage = () => {
 
 	const handleSubmit = async (e) => {
 		try {
+			setIsLoading(true)
 			e.preventDefault()
 			const {thumbnail, ...rest} = gameData
 			// Call API or perform actions with gameData
@@ -33,6 +35,7 @@ const CreateGamePage = () => {
 				'http://localhost:8000/games/',
 				gameData
 			)
+			setIsLoading((isLoading) => isLoading === false)
 			// const gameId = response.data
 			navigate('/games')
 		} catch (error) {
@@ -93,7 +96,7 @@ const CreateGamePage = () => {
 					/>
 				</Form.Group>
 
-				<Form.Group controlId="formThumbnail">
+				{/* <Form.Group controlId="formThumbnail">
 					<Form.Label>Thumbnail Image</Form.Label>
 					<Form.Control
 						type="file"
@@ -102,9 +105,14 @@ const CreateGamePage = () => {
 						onChange={handleChange}
 						// required
 					/>
-				</Form.Group>
+				</Form.Group> */}
 
-				<Button style={{marginTop: '3%'}} variant="primary" type="submit">
+				<Button
+					style={{marginTop: '3%'}}
+					variant="primary"
+					type="submit"
+					disabled={isLoading}
+				>
 					Create Game
 				</Button>
 			</Form>

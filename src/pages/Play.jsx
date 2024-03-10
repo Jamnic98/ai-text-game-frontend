@@ -107,7 +107,7 @@ export default function Play() {
 			msg: message,
 		})
 		const data = response.data
-		// console.log(data)
+
 		const newMessage = {
 			data: data.message,
 			member: computer,
@@ -134,7 +134,7 @@ export default function Play() {
 			{gameData ? (
 				<>
 					<Container fluid>
-						<Row style={{marginBottom:"2%"}}>
+						<Row style={{marginBottom: '2%'}}>
 							<header style={{textAlign: 'center'}}>
 								<h1 className="mt-5 mb-4">{gameData.title}</h1>
 								<p style={{width: '50%', margin: 'auto'}}>
@@ -197,15 +197,17 @@ export default function Play() {
 												justifyContent: 'space-around',
 											}}
 										>
-											<Loader text={'Generating Scene, submitting job onto the Coophive network'} />
+											<Loader
+												text={
+													'Generating Scene, submitting job onto the Coophive network'
+												}
+											/>
 										</div>
 									) : (
 										<img
 											src={`data:image/png;base64,${imageBase64Data}`}
 											alt="Generated Image"
-											style={{maxWidth: '100%', borderRadius: '5%', 	height: '65vh'}}
-											// width={800}
-											// height={800}
+											style={{maxWidth: '100%', borderRadius: '5%'}}
 										/>
 									)}
 								</>
