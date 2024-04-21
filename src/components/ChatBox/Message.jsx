@@ -10,7 +10,7 @@ const Message = ({member, data, me}) => {
 		color: messageFromMe ? '#ffffff' : '#000000',
 		borderRadius: '10px',
 		padding: '10px',
-		maxWidth: '60%',
+		maxWidth: '80%',
 		margin: '5px',
 		wordWrap: 'break-word',
 		textAlign: 'left',
@@ -36,7 +36,7 @@ const Message = ({member, data, me}) => {
 					{username}
 				</div>
 			</div>
-			<div style={{fontSize: '0.9rem', maxWidth: '100%'}}>{data}</div>
+			<div style={{fontSize: '1rem', maxWidth: '100%'}}>{data}</div>
 		</div>
 	)
 }

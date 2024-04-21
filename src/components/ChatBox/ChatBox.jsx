@@ -8,8 +8,8 @@ const ChatBox = ({messages, me, loadingNextMsg}) => {
 	return (
 		<div
 			style={{
-				height: '65vh',
-				maxHeight: '65vh',
+				height: '50vh',
+				maxHeight: '50vh',
 				overflowY: 'scroll',
 				padding: '10px',
 				borderRadius: '5%',

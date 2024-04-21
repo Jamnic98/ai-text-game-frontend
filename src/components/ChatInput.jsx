@@ -17,10 +17,10 @@ const ChatInput = ({onSendMessage, disabled}) => {
 	}
 
 	return (
-		<div style={{}}>
+		<div>
 			<form onSubmit={(e) => onSubmit(e)}>
 				<Row>
-					<InputGroup className="mb-3">
+					<InputGroup>
 						<Form.Control
 							type="text"
 							placeholder="Input Message"

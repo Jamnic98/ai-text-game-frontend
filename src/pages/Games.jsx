@@ -4,6 +4,7 @@ import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import Loader from '../components/Loader'
 import Base64Img from '../components/Base64Img'
+import {serverBaseURL} from '../settings'
 
 const GamesPage = () => {
 	const [loading, setLoading] = useState(true)
@@ -16,9 +17,7 @@ const GamesPage = () => {
 	const fetchGames = async () => {
 		setLoading(true)
 		try {
-			const response = await (
-				await axios.get('http://localhost:8000/games/')
-			).data
+			const response = await (await axios.get(`${serverBaseURL}/games/`)).data
 			setGames(response['games'])
 			setLoading(false)
 		} catch (error) {
@@ -45,7 +44,7 @@ const GamesPage = () => {
 				>
 					{games.length > 0 &&
 						games.map((game, index) => {
-							console.log(game)
+							// console.log(game)
 							return (
 								<Col
 									style={{height: '25%', width: '25%'}}

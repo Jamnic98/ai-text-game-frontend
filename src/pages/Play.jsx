@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button'
 import ChatBox from '../components/ChatBox/ChatBox'
 import ChatInput from '../components/ChatInput'
 import Loader from '../components/Loader'
+import {serverBaseURL, imgGenBaseURL} from '../settings'
 
 const computer = {
 	id: '0',
@@ -29,7 +30,7 @@ export default function Play() {
 	const [gameData, setGameData] = useState(null)
 	const [messages, setMessages] = useState([])
 	const [isLoadingMsg, setIsLoadingMsg] = useState(false)
-	const [isLoadingImg, setIsLoadingImg] = useState(true)
+	const [isLoadingImg, setIsLoadingImg] = useState(false)
 	const [isGameOver, setIsGameOver] = useState(false)
 
 	const [imagePrompt, setImagePrompt] = useState(null)
@@ -48,11 +49,13 @@ export default function Play() {
 			executeScript(imagePrompt).then(() => {
 				setIsLoadingImg(false)
 			})
+		} else {
+			setIsLoadingImg(true)
 		}
 	}, [imagePrompt])
 
 	const fetchGameData = async (gameId) => {
-		const response = await axios.get(`http://localhost:8000/games/${gameId}/`)
+		const response = await axios.get(`${serverBaseURL}/games/${gameId}/`)
 		const {title, description, objective, current_setting} = response.data
 		setGameData({
 			title,
@@ -70,21 +73,15 @@ export default function Play() {
 
 	const executeScript = async (prompt) => {
 		try {
+			console.log(prompt)
 			setIsLoadingImg(true)
-			const response = await fetch('http://localhost:3001/execute-script', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					command: 'hive run sdxl:v0.2.9',
-					prompt: prompt,
-				}),
-			})
 
-			const data = await response.json()
-			console.log(data.fileData)
-			setImageBase64Data(data.fileData)
+			// call stability api
+			const response = await axios.post('http://localhost:8000/stability/', {
+				prompt: prompt,
+			})
+			const {data} = response
+			setImageBase64Data(data)
 			setIsLoadingImg((isLoadingImg) => isLoadingImg === false)
 		} catch (error) {
 			console.error('Error:', error.message)
@@ -102,7 +99,7 @@ export default function Play() {
 
 	const makeMove = async (message) => {
 		setIsLoadingMsg(true)
-		const response = await axios.post(`http://localhost:8000/make_move`, {
+		const response = await axios.post(`${serverBaseURL}/make_move`, {
 			id: gameId,
 			msg: message,
 		})
@@ -133,7 +130,7 @@ export default function Play() {
 		<>
 			{gameData ? (
 				<>
-					<Container fluid>
+					<Container>
 						<Row style={{marginBottom: '2%'}}>
 							<header style={{textAlign: 'center'}}>
 								<h1 className="mt-5 mb-4">{gameData.title}</h1>
@@ -149,75 +146,80 @@ export default function Play() {
 									padding: '20px',
 									borderRadius: '5%',
 								}}
-								md={6}
 							>
 								<ChatBox
 									messages={messages}
 									me={me}
 									loadingNextMsg={isLoadingMsg}
 								/>
-								<div style={{marginTop: 5}}>
-									{isGameOver && (
-										<div
-											style={{
-												display: 'flex',
-												flexDirection: 'column',
-												justifyContent: 'center',
-												width: '50%',
-												margin: 'auto',
-											}}
-										>
-											<h6>Game Over</h6>
-											<p>Congratulations, you beat: {gameData.title}!</p>
-											<div style={{display: 'grid', gap: 10}}>
-												<Button onClick={handlePlayAgain} variant="success">
-													Play Again
-												</Button>
-												<Button onClick={handleNavigateToGames}>
-													Games Page
-												</Button>
-											</div>
-										</div>
-									)}
-								</div>
 								<ChatInput
 									onSendMessage={onSendMessage}
 									disabled={isGameOver}
 								/>
 							</Col>
 							<Col>
-								{/* <div>{imagePrompt}</div> */}
 								<>
-									{isLoadingImg ? (
-										<div
-											style={{
-												height: '65vh',
-												display: 'flex',
-												flexDirection: 'column',
-												justifyContent: 'space-around',
-											}}
-										>
+									<div
+										style={{
+											width: '100%',
+											height: '100%',
+											display: 'flex',
+											flexDirection: 'column',
+											justifyContent: 'space-around',
+										}}
+									>
+										{isLoadingImg ? (
 											<Loader
 												text={
 													'Generating Scene, submitting job onto the Coophive network'
 												}
 											/>
-										</div>
-									) : (
-										<img
-											src={`data:image/png;base64,${imageBase64Data}`}
-											alt="Generated Image"
-											style={{maxWidth: '100%', borderRadius: '5%'}}
-										/>
-									)}
+										) : (
+											<img
+												src={`data:image/png;base64,${imageBase64Data}`}
+												alt="Generated Image"
+												style={{
+													maxWidth: '100%',
+													// maxHeight: '65vh',
+													borderRadius: '5%',
+												}}
+											/>
+										)}
+									</div>
 								</>
 							</Col>
+						</Row>
+						<Row>
+							<div style={{marginTop: 5}}>
+								{isGameOver && (
+									<div
+										style={{
+											display: 'flex',
+											flexDirection: 'column',
+											justifyContent: 'center',
+											width: '50%',
+											margin: 'auto',
+										}}
+									>
+										<h6>Game Over</h6>
+										<p>You beat: {gameData.title}!</p>
+										<div style={{display: 'grid', gap: 10}}>
+											<Button onClick={handlePlayAgain} variant="success">
+												Play Again
+											</Button>
+											<Button onClick={handleNavigateToGames}>
+												Games Page
+											</Button>
+										</div>
+									</div>
+								)}
+							</div>
 						</Row>
 					</Container>
 				</>
 			) : (
 				<div style={{height: '80vh'}}>
-					<Loader />
+					<Loader text="Loading..." />
 				</div>
 			)}
 		</>

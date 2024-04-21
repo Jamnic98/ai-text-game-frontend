@@ -4,6 +4,8 @@ import {useNavigate} from 'react-router-dom'
 import {Container, Form, Button} from 'react-bootstrap'
 import axios from 'axios'
 
+import {serverBaseURL} from '../settings'
+
 const CreateGamePage = () => {
 	const navigate = useNavigate()
 	const [isLoading, setIsLoading] = useState(false)
@@ -30,11 +32,7 @@ const CreateGamePage = () => {
 			e.preventDefault()
 			const {thumbnail, ...rest} = gameData
 			// Call API or perform actions with gameData
-			// const response = await axios.post('http://localhost:8000/games/', rest)
-			const response = await axios.post(
-				'http://localhost:8000/games/',
-				gameData
-			)
+			const response = await axios.post(`${serverBaseURL}/games/`, gameData)
 			setIsLoading((isLoading) => isLoading === false)
 			// const gameId = response.data
 			navigate('/games')
