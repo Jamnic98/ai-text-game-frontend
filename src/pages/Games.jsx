@@ -42,7 +42,8 @@ const GamesPage = () => {
 				<Row
 					style={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap'}}
 				>
-					{games.length > 0 &&
+					{games &&
+						games?.length > 0 &&
 						games.map((game, index) => {
 							// console.log(game)
 							return (

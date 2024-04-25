@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button'
 import ChatBox from '../components/ChatBox/ChatBox'
 import ChatInput from '../components/ChatInput'
 import Loader from '../components/Loader'
-import {serverBaseURL, imgGenBaseURL} from '../settings'
+import {serverBaseURL} from '../settings'
 
 const computer = {
 	id: '0',
@@ -77,7 +77,7 @@ export default function Play() {
 			setIsLoadingImg(true)
 
 			// call stability api
-			const response = await axios.post('http://localhost:8000/stability/', {
+			const response = await axios.post(`${serverBaseURL}/stability/`, {
 				prompt: prompt,
 			})
 			const {data} = response
