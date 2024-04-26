@@ -32,7 +32,7 @@ const CreateGamePage = () => {
 			e.preventDefault()
 			const {thumbnail, ...rest} = gameData
 			// Call API or perform actions with gameData
-			const response = await axios.post(`${serverBaseURL}/games/`, gameData)
+			await axios.post(`${serverBaseURL}/games/`, gameData)
 			setIsLoading((isLoading) => isLoading === false)
 			// const gameId = response.data
 			navigate('/games')
